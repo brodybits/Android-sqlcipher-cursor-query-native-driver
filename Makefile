@@ -38,7 +38,8 @@ init:
 	cd ${OPENSSL_DIR} && git clean -dfx && \
 	git checkout -f && ./Configure dist
 
-all: build-external build-jni build-java copy-libs
+#all: build-external build-jni build-java copy-libs
+all: build-external build-jni copy-libs
 
 build-external:
 	cd ${EXTERNAL_DIR} && \
@@ -93,6 +94,8 @@ copy-libs:
 		${LIBRARY_ROOT}/armeabi && \
 	cp ${EXTERNAL_DIR}/libs/armeabi/libstlport_shared.so \
 		 ${LIBRARY_ROOT}/armeabi
+
+copy-more-libs:
 	mkdir -p ${LIBRARY_ROOT}/x86
 	cp ${EXTERNAL_DIR}/libs/x86/libsqlcipher_android.so \
 		 ${LIBRARY_ROOT}/x86  && \

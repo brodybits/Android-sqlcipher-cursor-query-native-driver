@@ -35,6 +35,8 @@
 
 namespace sqlcipher {
 
+static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam, int maxRead, int lastPos);
+
 CursorWindow * get_window_from_object(JNIEnv * env, jobject javaWindow);
 
 sqlite3_stmt * compile(JNIEnv* env, jobject object,
@@ -104,6 +106,9 @@ static int finish_program_and_get_row_count(sqlite3_stmt *statement) {
     return numRows;
 }
 
+extern "C"
+int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos);
+
 static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
                                jint startPos, jint offsetParam, jint maxRead, jint lastPos)
 {
@@ -115,7 +120,7 @@ static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
     int retryCount;
     int boundParams;
     CursorWindow * window;
-    
+
     if (statement == NULL) {
         LOGE("Invalid statement in fillWindow()");
         jniThrowException(env, "java/lang/IllegalStateException",
@@ -149,10 +154,29 @@ static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
     }
     LOG_WINDOW("Window: numRows = %d, size = %d, freeSpace = %d", window->getNumRows(), window->size(), window->freeSpace());
 
+    sqlite_query_fill_window(statement, window, startPos, offsetParam, maxRead, lastPos);
+}
+
+int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos)
+{
+    sqlite_query_fill_window(statement, (CursorWindow *)w, startPos, offsetParam, maxRead, lastPos);
+}
+
+static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam, int maxRead, int lastPos)
+{
+    int err;
+    //sqlite3_stmt * statement = GET_STATEMENT(env, object);
+    int numRows = lastPos;
+    maxRead += lastPos;
+    int numColumns;
+    int retryCount;
+    int boundParams;
+    //CursorWindow * window;
+
     numColumns = sqlite3_column_count(statement);
     if (!window->setNumColumns(numColumns)) {
         LOGE("Failed to change column count from %d to %d", window->getNumColumns(), numColumns);
-        jniThrowException(env, "java/lang/IllegalStateException", "numColumns mismatch");
+        //jniThrowException(env, "java/lang/IllegalStateException", "numColumns mismatch");
         return 0;
     }
 
@@ -160,7 +184,7 @@ static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
     if (startPos > 0) {
         int num = skip_rows(statement, startPos);
         if (num < 0) {
-            throw_sqlite3_exception(env, GET_HANDLE(env, object));
+            //throw_sqlite3_exception(env, GET_HANDLE(env, object));
             return 0;
         } else if (num < startPos) {
             LOGE("startPos %d > actual rows %d", startPos, num);
@@ -267,7 +291,7 @@ static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
                 } else {
                     // Unknown data
                     LOGE("Unknown column type when filling database window");
-                    throw_sqlite3_exception(env, "Unknown column type when filling window");
+                    //throw_sqlite3_exception(env, "Unknown column type when filling window");
                     break;
                 }
             }
@@ -298,7 +322,7 @@ static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
             retryCount++;
             continue;
         } else {
-            throw_sqlite3_exception(env, GET_HANDLE(env, object));
+            //throw_sqlite3_exception(env, GET_HANDLE(env, object));
             break;
         }
     }
@@ -335,7 +359,7 @@ static jstring native_column_name(JNIEnv* env, jobject object, jint columnIndex)
 static JNINativeMethod sMethods[] =
 {
      /* name, signature, funcPtr */
-    {"native_fill_window", "(Lnet/sqlcipher/CursorWindow;IIII)I", (void *)native_fill_window},
+    {"native_fill_window", "(Lcom/test/db/CursorWindow;IIII)I", (void *)native_fill_window},
     {"native_column_count", "()I", (void*)native_column_count},
     {"native_column_name", "(I)Ljava/lang/String;", (void *)native_column_name},
 };

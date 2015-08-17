@@ -700,7 +700,7 @@ int register_android_database_CursorWindow(JNIEnv * env)
 {
     jclass clazz;
 
-    clazz = env->FindClass("net/sqlcipher/CursorWindow");
+    clazz = env->FindClass("com/test/db/CursorWindow");
     if (clazz == NULL) {
         LOGE("Can't find net/sqlcipher/CursorWindow");
         return -1;
@@ -733,7 +733,7 @@ int register_android_database_CursorWindow(JNIEnv * env)
         return -1;
     }
 
-    return android::AndroidRuntime::registerNativeMethods(env, "net/sqlcipher/CursorWindow",
+    return android::AndroidRuntime::registerNativeMethods(env, "com/test/db/CursorWindow",
             sMethods, NELEM(sMethods));
 }
 

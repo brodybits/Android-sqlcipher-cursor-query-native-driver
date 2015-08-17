@@ -21,8 +21,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+// XXX TBD needs "../../../../bionic/libc/bionic/dlmalloc.h" to build:
 #include <cutils/mspace.h>
-#include <utils/Log.h>
 
 #include <sqlite3.h>
 

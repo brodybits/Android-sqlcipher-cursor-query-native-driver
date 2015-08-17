@@ -25,7 +25,8 @@ LOCAL_SRC_FILES:= \
 	net_sqlcipher_database_SQLiteQuery.cpp \
 	net_sqlcipher_CursorWindow.cpp \
 	CursorWindow.cpp
-#	net_sqlcipher_database_sqlcipher_SQLiteDebug.cpp
+#	XXX TBD needs "../../../../bionic/libc/bionic/dlmalloc.h" to build:
+#	net_sqlcipher_database_SQLiteDebug.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \

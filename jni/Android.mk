@@ -21,11 +21,8 @@ LOCAL_CFLAGS += -DSQLITE_HAS_CODEC
 
 LOCAL_SRC_FILES:= \
 	sqlc_all.c \
-	net_sqlcipher_database_SQLiteCompiledSql.cpp \
 	net_sqlcipher_database_SQLiteDatabase.cpp \
-	net_sqlcipher_database_SQLiteProgram.cpp \
 	net_sqlcipher_database_SQLiteQuery.cpp \
-	net_sqlcipher_database_SQLiteStatement.cpp \
 	net_sqlcipher_CursorWindow.cpp \
 	CursorWindow.cpp
 #	net_sqlcipher_database_sqlcipher_SQLiteDebug.cpp

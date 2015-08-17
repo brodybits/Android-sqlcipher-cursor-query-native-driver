@@ -667,7 +667,8 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	}
 	
 	LOGI("JNI_OnLoad register methods ");
-	
+
+/*
 	register_android_database_SQLiteDatabase(env);
 	register_android_database_SQLiteCompiledSql(env);
 
@@ -676,6 +677,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	register_android_database_SQLiteProgram(env);
 
 	register_android_database_SQLiteStatement(env);
+*/
 
 	register_android_database_CursorWindow(env);
 

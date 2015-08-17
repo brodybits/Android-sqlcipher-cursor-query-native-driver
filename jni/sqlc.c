@@ -229,7 +229,7 @@ int sqlc_query_fill_window(sqlc_handle_t st, int w, int startPos, int offsetPara
   sqlite3_stmt *myst = HANDLE_TO_VP(st);
 
   return sqlite_query_fill_window_handle(myst, w, startPos, offsetParam, maxRead, lastPos);
-} 
+}
 
 int sqlc_db_close(sqlc_handle_t db)
 {

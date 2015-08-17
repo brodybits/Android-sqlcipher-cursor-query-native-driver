@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.sqlcipher;
+package com.test.db;
 
 import android.database.CharArrayBuffer;
 
@@ -38,6 +38,9 @@ public class CursorWindow extends android.database.CursorWindow implements Parce
     /** The pointer to the native window class. set by the native methods in
      * android_database_CursorWindow.cpp
      */
+    // XXX TBD/FUTURE:
+    // - may need to be made public to support the needs of sqlite classes (for now)
+    // - consider renaming to better match newer versions of the Android source code
     private int nWindow;
 
     private int mStartPos;

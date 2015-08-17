@@ -21,6 +21,7 @@
 
 #include <jni.h>
 #include <JNIHelp.h>
+#if 0 // ** {{
 #include <android_runtime/AndroidRuntime.h>
 
 #include <sqlite3.h>
@@ -40,22 +41,26 @@
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/ucnv_err.h>
+#endif // ** }}
 
 #include "sqlite3_exception.h"
 #include "sqlcipher_loading.h"
 
+#if 0 // ** {{
 #define UTF16_STORAGE 0
 #define INVALID_VERSION -1
 #define SQLITE_SOFT_HEAP_LIMIT (4 * 1024 * 1024)
 #define ANDROID_TABLE "android_metadata"
 /* uncomment the next line to force-enable logging of all statements */
 // #define DB_LOG_STATEMENTS
+#endif // ** }}
 
 
 
 namespace sqlcipher {
 
 
+#if 0 // ** {{
 enum {
     OPEN_READWRITE          = 0x00000000,
     OPEN_READONLY           = 0x00000001,
@@ -651,11 +656,13 @@ int register_android_database_SQLiteDatabase(JNIEnv *env)
 
     return android::AndroidRuntime::registerNativeMethods(env, "net/sqlcipher/database/SQLiteDatabase", sMethods, NELEM(sMethods));
 }
+#endif // ** }}
 
 
 
-
+// ???:
 //this code is not executed 
+
 extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved) 
 { 
 	JNIEnv *env;
@@ -668,7 +675,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	
 	LOGI("JNI_OnLoad register methods ");
 
-/*
+#if 0 // ** {{
 	register_android_database_SQLiteDatabase(env);
 	register_android_database_SQLiteCompiledSql(env);
 
@@ -677,7 +684,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	register_android_database_SQLiteProgram(env);
 
 	register_android_database_SQLiteStatement(env);
-*/
+#endif // ** }}
 
 	register_android_database_CursorWindow(env);
 
@@ -687,10 +694,12 @@ return JNI_VERSION_1_2;
 
 } 
 
+#if 0 // ** {{
 /* throw a SQLiteException with a message appropriate for the error in handle */
 void throw_sqlite3_exception(JNIEnv* env, sqlite3* handle) {
     throw_sqlite3_exception(env, handle, NULL);
 }
+#endif // ** }}
 
 /* throw a SQLiteException with the given message */
 void throw_sqlite3_exception(JNIEnv* env, const char* message) {
@@ -711,6 +720,7 @@ void throw_sqlite3_exception(JNIEnv* env, sqlite3* handle, const char* message) 
     }
 }
 
+#if 0 // ** {{
 /* throw a SQLiteException for a given error code */
 void throw_sqlite3_exception_errcode(JNIEnv* env, int errcode, const char* message) {
     if (errcode == SQLITE_DONE) {
@@ -721,6 +731,7 @@ void throw_sqlite3_exception_errcode(JNIEnv* env, int errcode, const char* messa
         throw_sqlite3_exception(env, errcode, temp, message);
     }
 }
+#endif // ** }}
 
 /* throw a SQLiteException for a given error code, sqlite3message, and
    user message
@@ -729,6 +740,7 @@ void throw_sqlite3_exception(JNIEnv* env, int errcode,
                              const char* sqlite3Message, const char* message) {
     const char* exceptionClass;
     switch (errcode) {
+        // XXX TBD MARK correct android.database.sqlite exception:
         case SQLITE_IOERR:
             exceptionClass = "net/sqlcipher/database/SQLiteDiskIOException";
             break;

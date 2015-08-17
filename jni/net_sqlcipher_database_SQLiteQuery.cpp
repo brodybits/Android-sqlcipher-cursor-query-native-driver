@@ -17,26 +17,36 @@
 #undef LOG_TAG
 #define LOG_TAG "Cursor"
 
+#if 0 // ** {{
 #include <jni.h>
 #include <JNIHelp.h>
 #include <android_runtime/AndroidRuntime.h>
+#endif // ** }}
 
 #include <sqlite3.h>
 
+#if 0 // ** {{
 #include <utils/Log.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#endif // ** }}
 
 #include "CursorWindow.h"
+#if 0 // ** {{
 #include "sqlite3_exception.h"
+#endif // ** }}
 
 
 namespace sqlcipher {
 
+extern "C"
+int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos);
+
 static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam, int maxRead, int lastPos);
 
+#if 0 // ** {{
 CursorWindow * get_window_from_object(JNIEnv * env, jobject javaWindow);
 
 sqlite3_stmt * compile(JNIEnv* env, jobject object,
@@ -50,6 +60,7 @@ static jfieldID gStatementField;
         (sqlite3_stmt *)env->GetIntField(object, gStatementField)
 #define GET_HANDLE(env, object) \
         (sqlite3 *)env->GetIntField(object, gHandleField)
+#endif // ** }}
 
 static int skip_rows(sqlite3_stmt *statement, int maxRows) {
     int retryCount = 0;
@@ -106,9 +117,7 @@ static int finish_program_and_get_row_count(sqlite3_stmt *statement) {
     return numRows;
 }
 
-extern "C"
-int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos);
-
+#if 0 // ** {{
 static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
                                jint startPos, jint offsetParam, jint maxRead, jint lastPos)
 {
@@ -156,7 +165,9 @@ static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
 
     sqlite_query_fill_window(statement, window, startPos, offsetParam, maxRead, lastPos);
 }
+#endif // ** }}
 
+// XXX FUTURE TBD: int window handle is too small for 64-bit platforms!
 int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos)
 {
     sqlite_query_fill_window(statement, (CursorWindow *)w, startPos, offsetParam, maxRead, lastPos);
@@ -338,6 +349,7 @@ static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * win
     }
 }
 
+#if 0 // ** {{
 static jint native_column_count(JNIEnv* env, jobject object)
 {
     sqlite3_stmt * statement = GET_STATEMENT(env, object);
@@ -386,6 +398,7 @@ int register_android_database_SQLiteQuery(JNIEnv * env)
     return android::AndroidRuntime::registerNativeMethods(env,
         "net/sqlcipher/database/SQLiteQuery", sMethods, NELEM(sMethods));
 }
+#endif // ** }}
 
 
 } // namespace sqlcipher

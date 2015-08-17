@@ -17,43 +17,13 @@
 #undef LOG_TAG
 #define LOG_TAG "Database"
 
-#include <utils/Log.h>
+#include <cutils/log.h>
 
 #include <jni.h>
 #include <JNIHelp.h>
-#if 0 // ** {{
-#include <android_runtime/AndroidRuntime.h>
-
-#include <sqlite3.h>
-#include <sqlite3_android.h>
-
-#include <utils/Log.h>
-#include <utils/threads.h>
-#include <utils/List.h>
-#include <utils/Errors.h>
-
-#include <ctype.h>
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/ucnv_err.h>
-#endif // ** }}
 
 #include "sqlite3_exception.h"
 #include "sqlcipher_loading.h"
-
-#if 0 // ** {{
-#define UTF16_STORAGE 0
-#define INVALID_VERSION -1
-#define SQLITE_SOFT_HEAP_LIMIT (4 * 1024 * 1024)
-#define ANDROID_TABLE "android_metadata"
-/* uncomment the next line to force-enable logging of all statements */
-// #define DB_LOG_STATEMENTS
-#endif // ** }}
 
 
 

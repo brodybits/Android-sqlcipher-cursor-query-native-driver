@@ -29,7 +29,8 @@
 #include <utils/Atomic.h>
 #include <binder/IInterface.h>
 #include <binder/IPCThreadState.h>
-#include <utils/Log.h>
+//#include <utils/Log.h>
+#include <cutils/log.h>
 #include <utils/SystemClock.h>
 #include <cutils/logger.h>
 #include <binder/Parcel.h>

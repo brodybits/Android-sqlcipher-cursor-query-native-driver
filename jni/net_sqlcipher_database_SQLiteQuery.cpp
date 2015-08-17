@@ -17,26 +17,9 @@
 #undef LOG_TAG
 #define LOG_TAG "Cursor"
 
-#if 0 // ** {{
-#include <jni.h>
-#include <JNIHelp.h>
-#include <android_runtime/AndroidRuntime.h>
-#endif // ** }}
-
 #include <sqlite3.h>
 
-#if 0 // ** {{
-#include <utils/Log.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#endif // ** }}
-
 #include "CursorWindow.h"
-#if 0 // ** {{
-#include "sqlite3_exception.h"
-#endif // ** }}
 
 
 namespace sqlcipher {

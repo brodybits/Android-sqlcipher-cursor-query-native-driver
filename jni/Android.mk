@@ -37,9 +37,10 @@ LOCAL_C_INCLUDES += \
 	$(EXTERNAL_PATH)/dalvik/libnativehelper/include \
 	$(EXTERNAL_PATH)/dalvik/libnativehelper/include/nativehelper \
 	$(EXTERNAL_PATH)/platform-system-core/include \
-	$(LOCAL_PATH)/include \
 	$(EXTERNAL_PATH)/platform-frameworks-base/include \
 	$(EXTERNAL_PATH)/icu4c/common \
+#	Currently not needed:
+#	$(LOCAL_PATH)/include \
 
 LOCAL_SHARED_LIBRARIES := \
 	libcrypto \

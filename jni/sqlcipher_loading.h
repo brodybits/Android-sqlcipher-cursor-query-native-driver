@@ -17,26 +17,10 @@
 
 
 #include <jni.h>
-#if 0 // ** {{
-#include <JNIHelp.h>
-#include <android_runtime/AndroidRuntime.h>
-#endif // ** }}
 
 #include <sqlite3.h>
 
 namespace sqlcipher {
-
-#if 0 // ** {{
-int register_android_database_SQLiteDatabase(JNIEnv *env);
-
-int register_android_database_SQLiteCompiledSql(JNIEnv * env);
-
-int register_android_database_SQLiteQuery(JNIEnv * env);
-
-int register_android_database_SQLiteProgram(JNIEnv * env);
-
-int register_android_database_SQLiteStatement(JNIEnv * env);
-#endif // ** }}
 
 int register_android_database_SQLiteDebug(JNIEnv *env);
 

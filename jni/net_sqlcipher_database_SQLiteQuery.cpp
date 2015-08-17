@@ -29,22 +29,6 @@ int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPo
 
 static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam, int maxRead, int lastPos);
 
-#if 0 // ** {{
-CursorWindow * get_window_from_object(JNIEnv * env, jobject javaWindow);
-
-sqlite3_stmt * compile(JNIEnv* env, jobject object,
-                       sqlite3 * handle, jstring sqlString);
-
-static jfieldID gHandleField;
-static jfieldID gStatementField;
-
-
-#define GET_STATEMENT(env, object) \
-        (sqlite3_stmt *)env->GetIntField(object, gStatementField)
-#define GET_HANDLE(env, object) \
-        (sqlite3 *)env->GetIntField(object, gHandleField)
-#endif // ** }}
-
 static int skip_rows(sqlite3_stmt *statement, int maxRows) {
     int retryCount = 0;
     for (int i = 0; i < maxRows; i++) {
@@ -100,56 +84,6 @@ static int finish_program_and_get_row_count(sqlite3_stmt *statement) {
     return numRows;
 }
 
-#if 0 // ** {{
-static jint native_fill_window(JNIEnv* env, jobject object, jobject javaWindow,
-                               jint startPos, jint offsetParam, jint maxRead, jint lastPos)
-{
-    int err;
-    sqlite3_stmt * statement = GET_STATEMENT(env, object);
-    int numRows = lastPos;
-    maxRead += lastPos;
-    int numColumns;
-    int retryCount;
-    int boundParams;
-    CursorWindow * window;
-
-    if (statement == NULL) {
-        LOGE("Invalid statement in fillWindow()");
-        jniThrowException(env, "java/lang/IllegalStateException",
-                          "Attempting to access a deactivated, closed, or empty cursor");
-        return 0;
-    }
-
-    // Only do the binding if there is a valid offsetParam. If no binding needs to be done
-    // offsetParam will be set to 0, an invliad value.
-    if(offsetParam > 0) {
-        // Bind the offset parameter, telling the program which row to start with
-        err = sqlite3_bind_int(statement, offsetParam, startPos);
-        if (err != SQLITE_OK) {
-            LOGE("Unable to bind offset position, offsetParam = %d", offsetParam);
-            jniThrowException(env, "java/lang/IllegalArgumentException",
-                              sqlite3_errmsg(GET_HANDLE(env, object)));
-            return 0;
-        }
-        LOG_WINDOW("Bound to startPos %d", startPos);
-    } else {
-        LOG_WINDOW("Not binding to startPos %d", startPos);
-    }
-
-    // Get the native window
-    window = get_window_from_object(env, javaWindow);
-    if (!window) {
-        LOGE("Invalid CursorWindow");
-        jniThrowException(env, "java/lang/IllegalArgumentException",
-                          "Bad CursorWindow");
-        return 0;
-    }
-    LOG_WINDOW("Window: numRows = %d, size = %d, freeSpace = %d", window->getNumRows(), window->size(), window->freeSpace());
-
-    sqlite_query_fill_window(statement, window, startPos, offsetParam, maxRead, lastPos);
-}
-#endif // ** }}
-
 // XXX FUTURE TBD: int window handle is too small for 64-bit platforms!
 int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos)
 {
@@ -159,13 +93,13 @@ int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPo
 static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam, int maxRead, int lastPos)
 {
     int err;
-    //sqlite3_stmt * statement = GET_STATEMENT(env, object);
     int numRows = lastPos;
     maxRead += lastPos;
     int numColumns;
     int retryCount;
     int boundParams;
-    //CursorWindow * window;
+
+    // XXX TODO: report error or exception code to be thrown in Java
 
     numColumns = sqlite3_column_count(statement);
     if (!window->setNumColumns(numColumns)) {
@@ -331,57 +265,6 @@ static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * win
         return startPos + numRows;
     }
 }
-
-#if 0 // ** {{
-static jint native_column_count(JNIEnv* env, jobject object)
-{
-    sqlite3_stmt * statement = GET_STATEMENT(env, object);
-
-    return sqlite3_column_count(statement);
-}
-
-static jstring native_column_name(JNIEnv* env, jobject object, jint columnIndex)
-{
-    sqlite3_stmt * statement = GET_STATEMENT(env, object);
-    char const * name;
-
-    name = sqlite3_column_name(statement, columnIndex);
-
-    return env->NewStringUTF(name);
-}
-
-
-static JNINativeMethod sMethods[] =
-{
-     /* name, signature, funcPtr */
-    {"native_fill_window", "(Lcom/test/db/CursorWindow;IIII)I", (void *)native_fill_window},
-    {"native_column_count", "()I", (void*)native_column_count},
-    {"native_column_name", "(I)Ljava/lang/String;", (void *)native_column_name},
-};
-
-
-int register_android_database_SQLiteQuery(JNIEnv * env)
-{
-    jclass clazz;
-
-    clazz = env->FindClass("net/sqlcipher/database/SQLiteQuery");
-    if (clazz == NULL) {
-        LOGE("Can't find net/sqlcipher/database/SQLiteQuery");
-        return -1;
-    }
-
-    gHandleField = env->GetFieldID(clazz, "nHandle", "I");
-    gStatementField = env->GetFieldID(clazz, "nStatement", "I");
-
-    if (gHandleField == NULL || gStatementField == NULL) {
-        LOGE("Error locating fields");
-        return -1;
-    }
-
-    return android::AndroidRuntime::registerNativeMethods(env,
-        "net/sqlcipher/database/SQLiteQuery", sMethods, NELEM(sMethods));
-}
-#endif // ** }}
 
 
 } // namespace sqlcipher

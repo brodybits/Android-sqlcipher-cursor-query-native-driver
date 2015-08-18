@@ -84,11 +84,13 @@ static int finish_program_and_get_row_count(sqlite3_stmt *statement) {
     return numRows;
 }
 
+#if 0
 // XXX FUTURE TBD: int window handle is too small for 64-bit platforms!
 int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos)
 {
     sqlite_query_fill_window(statement, (CursorWindow *)w, startPos, offsetParam, maxRead, lastPos);
 }
+#endif
 
 static int sqlite_query_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam, int maxRead, int lastPos)
 {

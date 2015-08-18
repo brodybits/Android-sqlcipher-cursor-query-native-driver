@@ -696,7 +696,8 @@ static JNINativeMethod sMethods[] =
     {"getType_native", "(II)I", (void *)getType_native},
 };
 
-int register_android_database_CursorWindow(JNIEnv * env)
+//int register_android_database_CursorWindow(JNIEnv * env)
+int register_android_database_CursorWindow1(JNIEnv * env)
 {
     jclass clazz;
 

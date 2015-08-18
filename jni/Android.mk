@@ -20,6 +20,10 @@ include $(CLEAR_VARS)
 LOCAL_CFLAGS += -DSQLITE_HAS_CODEC
 
 LOCAL_SRC_FILES:= \
+	binder/CursorWindow.cpp \
+	android_database_CursorWindow.cpp \
+	android_database_SQLiteQuery.cpp \
+	Unicode.cpp \
 	sqlc_all.c \
 	net_sqlcipher_database_SQLiteDatabase.cpp \
 	net_sqlcipher_database_SQLiteQuery.cpp \

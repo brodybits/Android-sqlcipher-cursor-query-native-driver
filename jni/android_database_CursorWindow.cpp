@@ -30,11 +30,16 @@
 #include <string.h>
 #include <unistd.h>
 
+//#include <androidfw/CursorWindow.h>
 #include "binder/CursorWindow.h"
-#include "sqlite3_exception.h"
+//#include "android_os_Parcel.h"
 #include "android_util_Binder.h"
 
-//using namespace sqlcipher;
+//#include "android_database_SQLiteCommon.h"
+#include "sqlite3_exception.h"
+
+#define ALOGE LOGE
+
 using namespace android;
 
 namespace sqlcipher {
@@ -62,19 +67,14 @@ static void throwUnknownTypeException(JNIEnv * env, jint type) {
 
 static jint nativeCreate(JNIEnv* env, jclass clazz, jstring nameObj, jint cursorWindowSize) {
     String8 name;
-    if (nameObj) {
-        const char* nameStr = env->GetStringUTFChars(nameObj, NULL);
-        name.setTo(nameStr);
-        env->ReleaseStringUTFChars(nameObj, nameStr);
-    }
-    if (name.size() == 0) {
-        name.setTo("<unnamed>");
-    }
+    const char* nameStr = env->GetStringUTFChars(nameObj, NULL);
+    name.setTo(nameStr);
+    env->ReleaseStringUTFChars(nameObj, nameStr);
 
     CursorWindow* window;
     status_t status = CursorWindow::create(name, cursorWindowSize, &window);
     if (status || !window) {
-        LOGE("Could not allocate CursorWindow '%s' of size %d due to error %d.",
+        ALOGE("Could not allocate CursorWindow '%s' of size %d due to error %d.",
                 name.string(), cursorWindowSize, status);
         return 0;
     }
@@ -89,7 +89,7 @@ static jint nativeCreateFromParcel(JNIEnv* env, jclass clazz, jobject parcelObj)
     CursorWindow* window;
     status_t status = CursorWindow::createFromParcel(parcel, &window);
     if (status || !window) {
-        LOGE("Could not create CursorWindow from Parcel due to error %d.", status);
+        ALOGE("Could not create CursorWindow from Parcel due to error %d.", status);
         return 0;
     }
 

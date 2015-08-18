@@ -37,14 +37,13 @@ using namespace sqlcipher;
 namespace android {
 
 extern "C"
-int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos);
+int sqlite_query_fill_window_handle(sqlite3 *database, sqlite3_stmt * statement, long long win, int startPos, int offsetParam);
 
-static int native_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam);
+static int native_fill_window(sqlite3 *database, sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam);
 
-// XXX FUTURE TBD: int window handle is too small for 64-bit platforms!
-int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int /*maxRead*/, int /*lastPos*/)
+int sqlite_query_fill_window_handle(sqlite3 *database, sqlite3_stmt * statement, long long win, int startPos, int offsetParam)
 {
-    native_fill_window(statement, (CursorWindow *)w, startPos, offsetParam);
+    native_fill_window(database, statement, (CursorWindow *)win, startPos, offsetParam);
 }
 
 static jint nativeFillWindow(JNIEnv* env, jclass clazz, jint databasePtr,
@@ -53,10 +52,10 @@ static jint nativeFillWindow(JNIEnv* env, jclass clazz, jint databasePtr,
     sqlite3_stmt* statement = reinterpret_cast<sqlite3_stmt*>(statementPtr);
     CursorWindow* window = reinterpret_cast<CursorWindow*>(windowPtr);
 
-    return native_fill_window(statement, window, startPos, offsetParam);
+    return native_fill_window(database, statement, window, startPos, offsetParam);
 }
 
-static int native_fill_window(sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam)
+static int native_fill_window(sqlite3 *database, sqlite3_stmt * statement, CursorWindow * window, int startPos, int offsetParam)
 {
     // XXX TBD FIX EXCEPTIONS:
 

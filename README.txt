@@ -16,6 +16,5 @@ exports basic sqlite access functionaity through some static native functions.
 The CursorWindow implementation is NOW based on Android 5.0/5.1 and exports
 its native functionality through static native functions.
 
-XXX WARNING: Not expected to support 64-bit build since this implementation uses a 32-bit
-pointer handle *in the native cursor window query ONLY*. XXX TBD about be fixed.
+This implementation now uses 64-bit pointer handles and *should* 64-bit CPU safe.
 

@@ -86,7 +86,7 @@ int sqlc_st_finish(sqlc_handle_t st); /* call sqlite3_finalize() */
 int sqlc_st_reset(sqlc_handle_t st);
 int sqlc_st_clear_bindings(sqlc_handle_t st);
 
-int sqlc_query_fill_window(sqlc_handle_t st, int w, int startPos, int offsetParam, int maxRead, int lastPos);
+int sqlc_db_query_fill_window(sqlc_handle_t db, sqlc_handle_t st, sqlc_handle_t win, int startPos, int offsetParam);
 
 int sqlc_db_close(sqlc_handle_t db);
 

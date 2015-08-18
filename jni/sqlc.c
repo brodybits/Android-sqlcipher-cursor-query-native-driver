@@ -11,6 +11,9 @@
 #define HANDLE_FROM_VP(p) ( BASE_HANDLE_OFFSET + ( (unsigned char *)(p) - (unsigned char *)NULL ) )
 #define HANDLE_TO_VP(h) (void *)( (unsigned char *)NULL + (ptrdiff_t)((h) - BASE_HANDLE_OFFSET) )
 
+/* extern */
+int sqlite_query_fill_window_handle(sqlite3 *database, sqlite3_stmt * statement, long long win, int startPos, int offsetParam);
+
 sqlc_handle_t sqlc_db_open(const char *filename, int flags)
 {
   sqlite3 *d1;
@@ -222,15 +225,14 @@ int sqlc_st_clear_bindings(sqlc_handle_t st)
   return sqlite3_clear_bindings(myst);
 }
 
-int sqlite_query_fill_window_handle(sqlite3_stmt * statement, int w, int startPos, int offsetParam, int maxRead, int lastPos);
-
-int sqlc_query_fill_window(sqlc_handle_t st, int w, int startPos, int offsetParam, int maxRead, int lastPos)
+int sqlc_db_query_fill_window(sqlc_handle_t db, sqlc_handle_t st, sqlc_handle_t win, int startPos, int offsetParam)
 {
+  sqlite3 *mydb = HANDLE_TO_VP(db);
   sqlite3_stmt *myst = HANDLE_TO_VP(st);
 
-  return sqlite_query_fill_window_handle(myst, w, startPos, offsetParam, maxRead, lastPos);
+  return sqlite_query_fill_window_handle(mydb, myst, win, startPos, offsetParam);
 }
-
+ 
 int sqlc_db_close(sqlc_handle_t db)
 {
   sqlite3 *mydb = HANDLE_TO_VP(db);

@@ -13,10 +13,9 @@ such as Spatialite.
 SQLiteNative, based on Android-sqlite-native-driver and generated using Gluegen,
 exports basic sqlite access functionaity through some static native functions.
 
-The CursorWindow implementation is NOW based on Android 4.4 and exports
+The CursorWindow implementation is NOW based on Android 5.0/5.1 and exports
 its native functionality through static native functions.
 
-WARNING: Not expected to support 64-bit build since this implementation uses 32-bit
-integers for native pointer handles. This is solved in the Android 5.x/Android M
-sources.
+XXX WARNING: Not expected to support 64-bit build since this implementation uses a 32-bit
+pointer handle *in the native cursor window query ONLY*. XXX TBD about be fixed.
 

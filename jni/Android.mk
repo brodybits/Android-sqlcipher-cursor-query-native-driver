@@ -23,6 +23,7 @@ LOCAL_SRC_FILES:= \
 	sqlc_all.c \
 	binder/CursorWindow.cpp \
 	android_database_CursorWindow.cpp \
+	android_database_SQLiteConnection.cpp \
 	android_database_SQLiteQuery.cpp \
 	net_sqlcipher_database_SQLiteDatabase.cpp \
 	Unicode.cpp
